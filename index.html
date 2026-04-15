@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 🌸</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #dff6f0, #fef6e4);
+  overflow: hidden;
+}
+
+/* Floating background bubbles */
+body::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
+  background-size: 60px 60px;
+  animation: moveBg 20s linear infinite;
+}
+
+@keyframes moveBg {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(-200px,-200px); }
+}
+
+/* Slides */
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 1s ease;
+}
+
+.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+h1 {
+  font-size: 3rem;
+  color: #333;
+  animation: fadeUp 1s ease;
+}
+
+@keyframes fadeUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Buttons */
+button {
+  padding: 14px 30px;
+  margin: 15px;
+  font-size: 18px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#yes {
+  background: linear-gradient(45deg, #00c853, #69f0ae);
+  color: white;
+  box-shadow: 0 0 15px rgba(0,200,83,0.6);
+}
+
+#yes:hover {
+  transform: scale(1.2);
+}
+
+#no {
+  background: linear-gradient(45deg, #ff1744, #ff8a80);
+  color: white;
+}
+
+#no:hover {
+  transform: scale(0.9);
+}
+
+/* Image */
+img {
+  max-width: 280px;
+  margin-top: 20px;
+  animation: pop 0.5s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="slide active">
+  <h1>🎂 July 11 — Your Day</h1>
+</div>
+
+<div class="slide">
+  <h1>🕊️ Calm like your mountains</h1>
+</div>
+
+<div class="slide">
+  <h1>🍫 Panipuri + KitKat 😄</h1>
+</div>
+
+<div class="slide">
+  <h1>🌙 Your dreams matter</h1>
+</div>
+
+<div class="slide" id="final">
+  <h1>Will you be my best friend? 💛</h1>
+  <div>
+    <button id="yes">YES</button>
+    <button id="no">NO</button>
+  </div>
+  <div id="funArea"></div>
+</div>
+
+<script>
+let slides = document.querySelectorAll(".slide");
+let current = 0;
+
+function nextSlide() {
+  slides[current].classList.remove("active");
+  current++;
+  if (current < slides.length) {
+    slides[current].classList.add("active");
+  }
+}
+
+setInterval(() => {
+  if (current < slides.length - 1) {
+    nextSlide();
+  }
+}, 3000);
+
+let yes = document.getElementById("yes");
+let no = document.getElementById("no");
+let funArea = document.getElementById("funArea");
+
+no.addEventListener("click", () => {
+  funArea.innerHTML = `
+    <h3>😄 Choose again!</h3>
+    <img src="funny.png">
+  `;
+
+  yes.style.transform = "scale(1.6)";
+  no.style.transform = "scale(0.6)";
+});
+
+yes.addEventListener("click", () => {
+  funArea.innerHTML = "<h2>Yay! 💖</h2>";
+});
+</script>
+
+</body>
+</html>
