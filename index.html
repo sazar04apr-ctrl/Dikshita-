@@ -2,174 +2,155 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For You 🌸</title>
+<title>For You 💛</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
 body {
-  background: linear-gradient(135deg, #dff6f0, #fef6e4);
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
   overflow: hidden;
-}
-
-/* Floating background bubbles */
-body::before {
-  content: "";
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
-  background-size: 60px 60px;
-  animation: moveBg 20s linear infinite;
-}
-
-@keyframes moveBg {
-  0% { transform: translate(0,0); }
-  100% { transform: translate(-200px,-200px); }
-}
-
-/* Slides */
-.slide {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  opacity: 0;
-  transform: scale(0.95);
-  transition: all 1s ease;
-}
-
-.active {
-  opacity: 1;
-  transform: scale(1);
-}
-
-h1 {
-  font-size: 3rem;
   color: #333;
-  animation: fadeUp 1s ease;
+  text-align: center;
 }
 
-@keyframes fadeUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* Center content */
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-/* Buttons */
+/* Typing text */
+#text {
+  font-size: 26px;
+  max-width: 600px;
+  margin: auto;
+  min-height: 80px;
+}
+
+/* Button */
 button {
-  padding: 14px 30px;
+  padding: 12px 25px;
   margin: 15px;
-  font-size: 18px;
   border: none;
-  border-radius: 50px;
+  border-radius: 30px;
+  font-size: 18px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 #yes {
-  background: linear-gradient(45deg, #00c853, #69f0ae);
+  background: #00c853;
   color: white;
-  box-shadow: 0 0 15px rgba(0,200,83,0.6);
-}
-
-#yes:hover {
-  transform: scale(1.2);
 }
 
 #no {
-  background: linear-gradient(45deg, #ff1744, #ff8a80);
+  background: #ff5252;
   color: white;
 }
 
-#no:hover {
-  transform: scale(0.9);
+/* Floating hearts */
+.heart {
+  position: absolute;
+  color: rgba(255,255,255,0.6);
+  animation: float 6s linear infinite;
 }
 
-/* Image */
+@keyframes float {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-10vh); }
+}
+
 img {
-  max-width: 280px;
+  max-width: 250px;
   margin-top: 20px;
-  animation: pop 0.5s ease;
 }
-
-@keyframes pop {
-  from { transform: scale(0); }
-  to { transform: scale(1); }
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="slide active">
-  <h1>🎂 July 11 — Your Day</h1>
-</div>
-
-<div class="slide">
-  <h1>🕊️ Calm like your mountains</h1>
-</div>
-
-<div class="slide">
-  <h1>🍫 Panipuri + KitKat 😄</h1>
-</div>
-
-<div class="slide">
-  <h1>🌙 Your dreams matter</h1>
-</div>
-
-<div class="slide" id="final">
-  <h1>Will you be my best friend? 💛</h1>
-  <div>
+<div class="container">
+  <div id="text"></div>
+  <div id="buttons" style="display:none;">
+    <h2>Will you be my best friend? 💛</h2>
     <button id="yes">YES</button>
     <button id="no">NO</button>
+    <div id="fun"></div>
   </div>
-  <div id="funArea"></div>
 </div>
 
 <script>
-let slides = document.querySelectorAll(".slide");
-let current = 0;
+let messages = [
+  "Hey... just a small thing for you 💛",
+  "Take your medicines on time 💊",
+  "Eat properly, okay? 🍲",
+  "And please take care of yourself...",
+  "You matter more than you think 🌙"
+];
 
-function nextSlide() {
-  slides[current].classList.remove("active");
-  current++;
-  if (current < slides.length) {
-    slides[current].classList.add("active");
+let i = 0;
+let j = 0;
+let currentText = "";
+let isDeleting = false;
+
+function typeEffect() {
+  if (i < messages.length) {
+    if (!isDeleting && j <= messages[i].length) {
+      currentText = messages[i].substring(0, j++);
+    } else if (isDeleting && j >= 0) {
+      currentText = messages[i].substring(0, j--);
+    }
+
+    document.getElementById("text").innerText = currentText;
+
+    if (j === messages[i].length + 1) {
+      isDeleting = true;
+      setTimeout(typeEffect, 1000);
+      return;
+    }
+
+    if (j === 0 && isDeleting) {
+      isDeleting = false;
+      i++;
+    }
+
+    setTimeout(typeEffect, isDeleting ? 40 : 70);
+  } else {
+    document.getElementById("buttons").style.display = "block";
   }
 }
 
-setInterval(() => {
-  if (current < slides.length - 1) {
-    nextSlide();
-  }
-}, 3000);
+typeEffect();
 
+// Hearts animation
+setInterval(() => {
+  let heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 6000);
+}, 300);
+
+// Buttons logic
 let yes = document.getElementById("yes");
 let no = document.getElementById("no");
-let funArea = document.getElementById("funArea");
+let fun = document.getElementById("fun");
 
-no.addEventListener("click", () => {
-  funArea.innerHTML = `
-    <h3>😄 Choose again!</h3>
-    <img src="funny.png">
-  `;
-
+no.onclick = () => {
+  fun.innerHTML = "<p>😄 choose again!</p><img src='funny.png'>";
   yes.style.transform = "scale(1.6)";
   no.style.transform = "scale(0.6)";
-});
+};
 
-yes.addEventListener("click", () => {
-  funArea.innerHTML = "<h2>Yay! 💖</h2>";
-});
+yes.onclick = () => {
+  fun.innerHTML = "<h2>Yay 💖</h2>";
+};
 </script>
 
 </body>
